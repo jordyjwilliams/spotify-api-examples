@@ -146,3 +146,10 @@ def display_track_info(track):
     console.print("   [dim]   • Playlist analysis[/dim]")
 
 
+def display_success():
+    """Display success message."""
+    console.print(Panel.fit(
+        "[bold green]✅ Example completed successfully![/bold green]\n[dim]All operations completed without errors.[/dim]",
+        border_style="green"
+    ))
+
