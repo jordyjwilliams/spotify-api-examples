@@ -196,14 +196,20 @@ uv run ruff check . && uv run ruff format --check . && uv run pyright
 spotify-api-examples/
 ├── src/
 │   ├── __init__.py
+│   ├── base_client.py      # Base client with auth and HTTP
 │   ├── config.py           # Configuration management
 │   ├── models.py           # Pydantic models
-│   ├── spotify.py          # Main Spotify client
-# NOTE: tests have not been written yet! TODO
+│   ├── playlists.py        # Playlist operations
+│   ├── tracks.py           # Track operations
+│   ├── spotify_client.py   # Unified client
+│   └── auth_server.py      # OAuth callback server
+# NOTE: tests not written yet. TODO.
 ├── tests/
 │   ├── __init__.py
 │   ├── conftest.py         # Test configuration
 │   ├── test_models.py      # Model tests
+├── examples/
+│   └── basic_usage.py      # Comprehensive example
 ├── .env.example            # Environment template
 ├── .gitignore
 ├── pyproject.toml          # Project configuration
