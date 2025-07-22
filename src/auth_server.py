@@ -49,3 +49,33 @@ class AuthServer:
                 """
             )
 
+        # Verify state
+        if "state" in params:
+            self.state = params["state"]
+
+        # Get authorization code
+        if "code" in params:
+            self.auth_code = params["code"]
+            return HTMLResponse(
+                """
+                <html>
+                <body>
+                    <h1>Authorization Successful!</h1>
+                    <p>You have been successfully authorized.</p>
+                    <p>You can close this window and return to your application.</p>
+                </body>
+                </html>
+                """
+            )
+
+        return HTMLResponse(
+            """
+            <html>
+            <body>
+                <h1>Invalid Callback</h1>
+                <p>No authorization code received.</p>
+                <p>You can close this window and try again.</p>
+            </body>
+            </html>
+            """
+        )
