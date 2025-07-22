@@ -234,26 +234,3 @@ class SearchResult(BaseModel):
     artists: dict[str, Any] | None = None
     albums: dict[str, Any] | None = None
     playlists: dict[str, Any] | None = None
-
-
-class AudioFeatures(BaseModel):
-    """Audio features for a track."""
-
-    id: str
-    acousticness: float = Field(ge=0.0, le=1.0)
-    analysis_url: HttpUrl
-    danceability: float = Field(ge=0.0, le=1.0)
-    duration_ms: int
-    energy: float = Field(ge=0.0, le=1.0)
-    instrumentalness: float = Field(ge=0.0, le=1.0)
-    key: int = Field(ge=-1, le=11)
-    liveness: float = Field(ge=0.0, le=1.0)
-    loudness: float
-    mode: int = Field(ge=0, le=1)
-    speechiness: float = Field(ge=0.0, le=1.0)
-    tempo: float
-    time_signature: int
-    track_href: HttpUrl
-    type: str = "audio_features"
-    uri: str
-    valence: float = Field(ge=0.0, le=1.0)
