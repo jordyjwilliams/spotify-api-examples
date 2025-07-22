@@ -74,8 +74,6 @@ class SpotifyConfig(BaseModel):
     @classmethod
     def from_env(cls) -> "SpotifyConfig":
         """Create configuration from environment variables."""
-        from pydantic import HttpUrl
-
         redirect_uri_str = os.getenv("SPOTIFY_REDIRECT_URI", DEFAULT_REDIRECT_URI)
         redirect_uri = HttpUrl(redirect_uri_str)
 
