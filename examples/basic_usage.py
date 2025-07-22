@@ -81,3 +81,18 @@ async def search_and_display_tracks(client: SpotifyClient):
     console.print(track_table)
     return tracks
 
+
+async def create_test_playlist(client: SpotifyClient):
+    """Create a new test playlist."""
+    console.print("\n[bold cyan]4. Creating a new playlist...[/bold cyan]")
+    playlist_name = "API Test Playlist"
+    playlist = await client.create_playlist(
+        name=playlist_name,
+        description="Created with Spotify API examples",
+        public=False,
+    )
+    console.print(f"   ✅ Created playlist: [bold green]{playlist.name}[/bold green]")
+    console.print(f"   🆔 Playlist ID: [dim]{playlist.id}[/dim]")
+    console.print(f"   🔗 URL: [link={playlist.external_urls.spotify}]{playlist.external_urls.spotify}[/link]")
+    return playlist
+
