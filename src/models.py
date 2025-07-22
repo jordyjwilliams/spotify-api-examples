@@ -91,3 +91,47 @@ class Album(BaseModel):
             raise ValueError('Album URI must start with "spotify:album:"')
         return v
 
+
+class Track(BaseModel):
+    """Spotify track object."""
+
+    id: str
+    name: str
+    album: Album
+    artists: list[Artist]
+    disc_number: int
+    duration_ms: int
+    explicit: bool
+    external_ids: dict[str, str] = {}
+    external_urls: ExternalUrls
+    href: HttpUrl
+    is_local: bool
+    is_playable: bool | None = None
+    linked_from: Any | None = None
+    popularity: int
+    preview_url: HttpUrl | None = None
+    track_number: int
+    type: str = "track"
+    uri: str
+
+    @field_validator("uri")
+    @classmethod
+    def validate_uri(cls, v: str) -> str:
+        """Validate that URI follows Spotify format."""
+        if not v.startswith("spotify:track:"):
+            raise ValueError('Track URI must start with "spotify:track:"')
+        return v
+
+    @property
+    def duration_seconds(self) -> float:
+        """Get track duration in seconds."""
+        return self.duration_ms / 1000.0
+
+    @property
+    def duration_formatted(self) -> str:
+        """Get formatted track duration."""
+        total_seconds = int(self.duration_seconds)
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        return f"{minutes}:{seconds:02d}"
+
