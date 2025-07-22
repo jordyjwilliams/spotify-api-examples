@@ -145,3 +145,17 @@ class PlaylistTrack(BaseModel):
     primary_color: str | None = None
     track: Track
     video_thumbnail: dict[str, Any] | None = None
+
+
+class PlaylistTracks(BaseModel):
+    """Playlist tracks container."""
+
+    href: HttpUrl
+    items: list[PlaylistTrack]
+    limit: int
+    next: HttpUrl | None = None
+    offset: int
+    previous: HttpUrl | None = None
+    total: int
+
+
