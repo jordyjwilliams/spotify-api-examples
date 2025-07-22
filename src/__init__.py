@@ -4,7 +4,7 @@ from pathlib import Path
 import tomllib
 
 from .models import Playlist, Track, User
-from .spotify import SpotifyClient
+from .spotify_client import SpotifyClient
 
 
 def _get_version() -> str:
