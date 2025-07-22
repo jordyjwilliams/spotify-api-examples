@@ -234,3 +234,7 @@ class SpotifyClient:
                 response=e.response.json() if e.response.content else None,
             ) from e
 
+    async def get_current_user(self) -> User:
+        """Get current user information."""
+        data = await self._make_request("GET", "/me")
+        return User.model_validate(data)
