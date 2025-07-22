@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 """Basic usage example for Spotify API client.
+
+This example demonstrates:
+1. Getting current user (`get_user_info`)
+2. Listing user's playlists (`display_user_playlists`)
+3. Searching for tracks (`search_and_display_tracks`)
+4. Create a playlist (`create_test_playlist`)
+5. Add tracks to a playlist (`add_tracks_to_playlist`)
+6. Display updated playlist (`display_updated_playlist`)
+7. Track Info (`display_track_info`)
+
+Before running this script, make sure to:
+1. Set up your Spotify API credentials in a .env file
+2. Install dependencies: uv sync
+
 NOTE: This will generate playlists in your account!
 """
 
