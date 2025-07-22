@@ -80,6 +80,25 @@ client.clear_auth_cache()
 ```
 
 ## 📚 Examples
+## 🎯 Quick Start
+
+The easiest way to get started is with the comprehensive example script:
+
+```bash
+uv run python -m examples.basic_usage
+```
+**What it demonstrates:**
+- User authentication and profile retrieval
+- Playlist management (create, read, update)
+- Track search and discovery
+- Playlist modification (adding tracks)
+> [!TIP]
+> **Quick Start**: The `basic_usage.py` script is the best way to get started! It provides a complete demonstration of all the library's features with beautiful console output using Rich. Run it after setting up your `.env` file to see everything in action.
+> 
+> **Token Persistence**: Authentication tokens are automatically cached in `.spotify_token_cache.json` and will be reused on subsequent runs, so you won't need to re-authenticate each time!
+
+> [!IMPORTANT]
+> This will create playlists in your account!
 
 ### Basic Playlist Operations
 
