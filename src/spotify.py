@@ -79,3 +79,42 @@ class SpotifyClient:
                 limits=httpx.Limits(max_keepalive_connections=5, max_connections=10),
             )
         return self._client
+
+    async def _ensure_authenticated(self):
+        """Ensure we have a valid access token."""
+        if not self._access_token:
+            await self.authenticate()
+
+    async def authenticate(self, force_refresh: bool = False):
+        """Authenticate with Spotify using Authorization Code flow."""
+        if self._access_token and not force_refresh:
+            return
+
+        # Generate state for security
+        state = secrets.token_urlsafe(32)
+
+        # Build authorization URL
+        auth_params = {
+            "client_id": self.config.client_id,
+            "response_type": "code",
+            "redirect_uri": str(self.config.redirect_uri),
+            "state": state,
+            "scope": self.config.scopes_string,
+        }
+
+        auth_url = f"{self.config.authorize_url}?{urlencode(auth_params)}"
+
+        async with AuthServer(config=self.config).serve() as auth_server:
+            # Open browser for user authorization
+            print("Opening browser for Spotify authorization...")
+            print(f"If browser doesn't open, visit: {auth_url}")
+            webbrowser.open(auth_url)
+
+            # Wait for the authorization callback
+            code = await auth_server.wait_for_auth(state)
+
+        # Exchange code for tokens
+        await self._exchange_code_for_tokens(code)
+
+        # Get user ID
+        await self._get_user_id()
