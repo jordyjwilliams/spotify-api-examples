@@ -96,3 +96,18 @@ async def create_test_playlist(client: SpotifyClient):
     console.print(f"   🔗 URL: [link={playlist.external_urls.spotify}]{playlist.external_urls.spotify}[/link]")
     return playlist
 
+
+async def add_tracks_to_playlist(client: SpotifyClient, playlist, tracks):
+    """Add tracks to the specified playlist."""
+    if not tracks:
+        console.print("\n[bold yellow]⚠️  No tracks to add to playlist[/bold yellow]")
+        return None
+
+    console.print("\n[bold cyan]5. Adding tracks to the playlist...[/bold cyan]")
+    track_uris = [track.uri for track in tracks[:3]]  # Add first 3 tracks
+    snapshot_id = await client.add_tracks_to_playlist(playlist.id, track_uris)
+    console.print(f"   ➕ Added [bold yellow]{len(track_uris)}[/bold yellow] tracks to playlist")
+    console.print(f"   📸 Snapshot ID: [dim]{snapshot_id}[/dim]")
+    return snapshot_id
+
+
