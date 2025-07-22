@@ -292,3 +292,30 @@ class SpotifyClient:
             "POST", f"/users/{user}/playlists", data=data
         )
         return Playlist.model_validate(response_data)
+
+    async def add_tracks_to_playlist(
+        self, playlist_id: str, track_uris: list[str], position: int | None = None
+    ) -> str:
+        """Add tracks to a playlist."""
+        data: dict[str, Any] = {"uris": track_uris}
+        if position is not None:
+            data["position"] = position
+
+        response_data = await self._make_request(
+            "POST", f"/playlists/{playlist_id}/tracks", data=data
+        )
+        return response_data["snapshot_id"]
+
+    async def remove_tracks_from_playlist(
+        self, playlist_id: str, track_uris: list[str], snapshot_id: str | None = None
+    ) -> str:
+        """Remove tracks from a playlist."""
+        data: dict[str, Any] = {"uris": track_uris}
+        if snapshot_id:
+            data["snapshot_id"] = snapshot_id
+
+        response_data = await self._make_request(
+            "DELETE", f"/playlists/{playlist_id}/tracks", data=data
+        )
+        return response_data["snapshot_id"]
+
