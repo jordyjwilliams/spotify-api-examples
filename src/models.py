@@ -26,3 +26,24 @@ class Followers(BaseModel):
     href: HttpUrl | None = None
     total: int = 0
 
+
+class User(BaseModel):
+    """Spotify user object."""
+
+    id: str
+    display_name: str | None = None
+    external_urls: ExternalUrls
+    followers: Followers | None = None
+    href: HttpUrl
+    images: list[Image] | None = []
+    type: str = "user"
+    uri: str
+
+    @field_validator("uri")
+    @classmethod
+    def validate_uri(cls, v: str) -> str:
+        """Validate that URI follows Spotify format."""
+        if not v.startswith("spotify:user:"):
+            raise ValueError('User URI must start with "spotify:user:"')
+        return v
+
