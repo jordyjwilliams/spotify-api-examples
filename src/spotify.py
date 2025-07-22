@@ -29,6 +29,7 @@ TOKEN_CACHE_FILE = Path(".spotify_token_cache.json")
 
 class SpotifyAuthError(Exception):
     """Raised when authentication fails."""
+
     pass
 
 
@@ -104,10 +105,10 @@ class SpotifyClient:
         """Load tokens from cache file if available."""
         try:
             if TOKEN_CACHE_FILE.exists():
-                with open(TOKEN_CACHE_FILE, 'r') as f:
+                with open(TOKEN_CACHE_FILE) as f:
                     token_data = json.load(f)
-                    self._access_token = token_data.get('access_token')
-                    self._refresh_token = token_data.get('refresh_token')
+                    self._access_token = token_data.get("access_token")
+                    self._refresh_token = token_data.get("refresh_token")
                     logger.info("Loaded tokens from cache")
                     return True
         except Exception as e:
@@ -119,10 +120,10 @@ class SpotifyClient:
         try:
             if self._access_token and self._refresh_token:
                 token_data = {
-                    'access_token': self._access_token,
-                    'refresh_token': self._refresh_token,
+                    "access_token": self._access_token,
+                    "refresh_token": self._refresh_token,
                 }
-                with open(TOKEN_CACHE_FILE, 'w') as f:
+                with open(TOKEN_CACHE_FILE, "w") as f:
                     json.dump(token_data, f)
                 logger.info("Saved tokens to cache")
         except Exception as e:
@@ -456,6 +457,6 @@ class SpotifyClient:
         params = {}
         if market:
             params["market"] = market
-        
+
         data = await self._make_request("GET", f"/tracks/{track_id}", params=params)
         return Track.model_validate(data)
