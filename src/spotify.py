@@ -191,3 +191,46 @@ class SpotifyClient:
         user = await self.get_current_user()
         self._user_id = user.id
 
+    async def _make_request(
+        self,
+        method: str,
+        endpoint: str,
+        params: dict[str, Any] | None = None,
+        data: dict[str, Any] | None = None,
+        retries: int = 0,
+    ) -> dict[str, Any]:
+        """Make authenticated request to Spotify API."""
+        await self._ensure_authenticated()
+
+        url = f"{self.config.api_base_url}{endpoint}"
+        headers = {
+            "Authorization": f"Bearer {self._access_token}",
+            "Content-Type": "application/json",
+        }
+
+        try:
+            response = await self.client.request(
+                method,
+                url,
+                params=params,
+                json=data,
+                headers=headers,
+            )
+
+            if response.status_code == 401 and retries < 1:
+                # Token expired, try to refresh
+                await self._refresh_access_token()
+                return await self._make_request(
+                    method, endpoint, params, data, retries + 1
+                )
+
+            response.raise_for_status()
+            return response.json()
+
+        except httpx.HTTPStatusError as e:
+            raise SpotifyAPIError(
+                f"API request failed: {e.response.text}",
+                status_code=e.response.status_code,
+                response=e.response.json() if e.response.content else None,
+            ) from e
+
