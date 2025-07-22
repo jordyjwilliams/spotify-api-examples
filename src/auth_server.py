@@ -109,3 +109,18 @@ class AuthServer:
                 # Log any other errors but don't raise them
                 print(f"Warning: Error stopping auth server: {e}")
 
+    async def wait_for_auth(self, expected_state: str, timeout: int = 300) -> str:
+        """Wait for authentication callback and return the authorization code."""
+        start_time = asyncio.get_event_loop().time()
+
+        while asyncio.get_event_loop().time() - start_time < timeout:
+            if self.auth_error:
+                raise Exception(f"Authorization error: {self.auth_error}")
+
+            if self.auth_code and self.state == expected_state:
+                return self.auth_code
+
+            await asyncio.sleep(0.1)
+
+        raise Exception("Authentication timeout")
+
