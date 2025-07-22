@@ -104,6 +104,51 @@ uv run python -m examples.basic_usage
 > [!IMPORTANT]
 > This will create playlists in your account!
 
+## 🏗️ Architecture
+
+The library uses a modular architecture for better separation of concerns and extensibility:
+
+### Core Components
+
+- **`BaseSpotifyClient`**: Handles authentication, HTTP requests, and token management
+- **`PlaylistClient`**: Specialized client for playlist operations
+- **`TrackClient`**: Specialized client for track operations
+- **`SpotifyClient`**: Unified client that combines all specialized clients
+
+### Usage Patterns
+
+**Option 1: Unified Client (Recommended)**
+```python
+from src.spotify_client import SpotifyClient
+
+async with SpotifyClient() as client:
+    playlists = await client.get_user_playlists()
+    tracks = await client.search_tracks("query")
+```
+
+**Option 2: Direct Module Usage**
+```python
+from src.base_client import BaseSpotifyClient
+from src.playlists import PlaylistClient
+from src.tracks import TrackClient
+
+async with BaseSpotifyClient() as base_client:
+    playlists = PlaylistClient(base_client)
+    tracks = TrackClient(base_client)
+    
+    user_playlists = await playlists.get_user_playlists()
+    search_results = await tracks.search_tracks("query")
+```
+
+### Benefits of Modular Architecture
+
+- **Separation of Concerns**: Each module has a single responsibility
+- **Easier Testing**: Test each module independently
+- **Better Maintainability**: Changes to playlist logic don't affect track logic
+- **Extensibility**: Easy to add new modules (e.g., `albums.py`, `artists.py`)
+- **Code Reuse**: Base client can be used by other projects
+- **Cleaner Imports**: Import only what you need
+
 ### Basic Playlist Operations
 
 ```python
