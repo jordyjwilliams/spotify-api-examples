@@ -159,3 +159,51 @@ class PlaylistTracks(BaseModel):
     total: int
 
 
+class Playlist(BaseModel):
+    """Spotify playlist object."""
+
+    id: str
+    name: str
+    collaborative: bool
+    description: str | None = None
+    external_urls: ExternalUrls
+    followers: Followers | None = None
+    href: HttpUrl
+    images: list[Image] | None = []
+    owner: User
+    primary_color: str | None = None
+    public: bool
+    snapshot_id: str
+    tracks: PlaylistTracks
+    type: str = "playlist"
+    uri: str
+
+    @field_validator("uri")
+    @classmethod
+    def validate_uri(cls, v: str) -> str:
+        """Validate that URI follows Spotify format."""
+        if not v.startswith("spotify:playlist:"):
+            raise ValueError('Playlist URI must start with "spotify:playlist:"')
+        return v
+
+    @property
+    def track_count(self) -> int:
+        """Get number of tracks in playlist."""
+        return self.tracks.total
+
+    @property
+    def duration_ms(self) -> int:
+        """Get total duration in milliseconds."""
+        return sum(track.track.duration_ms for track in self.tracks.items)
+
+    @property
+    def duration_formatted(self) -> str:
+        """Get formatted total duration."""
+        total_seconds = self.duration_ms // 1000
+        hours = total_seconds // 3600
+        minutes = (total_seconds % 3600) // 60
+
+        if hours > 0:
+            return f"{hours}h {minutes}m"
+        return f"{minutes}m"
+
