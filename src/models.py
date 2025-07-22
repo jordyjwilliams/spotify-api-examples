@@ -225,6 +225,17 @@ class Playlist(BaseModel):
             "type": self.type,
             "uri": self.uri,
         }
+
+
+class SearchResult(BaseModel):
+    """Search result container."""
+
+    tracks: dict[str, Any] | None = None
+    artists: dict[str, Any] | None = None
+    albums: dict[str, Any] | None = None
+    playlists: dict[str, Any] | None = None
+
+
 class AudioFeatures(BaseModel):
     """Audio features for a track."""
 
