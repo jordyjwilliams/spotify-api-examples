@@ -119,3 +119,30 @@ async def display_updated_playlist(client: SpotifyClient, playlist):
     console.print(f"   ⏱️  Total duration: [bold yellow]{updated_playlist.duration_formatted}[/bold yellow]")
     return updated_playlist
 
+
+def display_track_info(track):
+    """Display track information."""
+    console.print("\n[bold cyan]7. Getting Track Info...[/bold cyan]")
+    table = Table(show_header=True, header_style="bold green", title="Track Information")
+    table.add_column("Property", style="cyan", width=20)
+    table.add_column("Value", style="yellow", width=40)
+    
+    # Basic track information
+    table.add_row("Name", track.name)
+    table.add_row("Artists", ", ".join(artist.name for artist in track.artists))
+    table.add_row("Album", track.album.name)
+    table.add_row("Duration", f"{track.duration_ms // 1000 // 60}:{track.duration_ms // 1000 % 60:02d}")
+    table.add_row("Popularity", f"{track.popularity}/100")
+    table.add_row("Explicit", "Yes" if track.explicit else "No")
+    table.add_row("Track Number", str(track.track_number))
+    table.add_row("Disc Number", str(track.disc_number))
+    
+    console.print(table)
+    
+    console.print("\n   [dim]💡 Tip: Audio features endpoint is depricated. Track Information:[/dim]")
+    console.print("   [dim]   • Track metadata (duration, popularity, explicit content)[/dim]")
+    console.print("   [dim]   • Album information[/dim]")
+    console.print("   [dim]   • Artist details[/dim]")
+    console.print("   [dim]   • Playlist analysis[/dim]")
+
+
