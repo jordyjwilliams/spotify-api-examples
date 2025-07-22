@@ -1,7 +1,7 @@
 """Source code for Spotify Web API Playlist Endpoints."""
 
-import tomllib
 from pathlib import Path
+import tomllib
 
 from .models import Playlist, Track, User
 from .spotify import SpotifyClient

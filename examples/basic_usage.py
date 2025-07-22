@@ -18,8 +18,8 @@ NOTE: This will generate playlists in your account!
 """
 
 import asyncio
-import sys
 from pathlib import Path
+import sys
 
 from rich.console import Console
 from rich.panel import Panel

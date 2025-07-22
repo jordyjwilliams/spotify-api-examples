@@ -4,9 +4,9 @@ import asyncio
 from contextlib import asynccontextmanager
 from urllib.parse import urlparse
 
-import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+import uvicorn
 
 from .config import SpotifyConfig
 
