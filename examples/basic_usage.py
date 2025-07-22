@@ -161,3 +161,40 @@ def display_error(error_type: str, error_message: str, additional_info: str = ""
         border_style="red"
     ))
 
+
+async def main():
+    """Main example function."""
+    # Header
+    console.print(Panel.fit(
+        "[bold blue]🎵 Spotify API Examples[/bold blue]\n[dim]Basic Usage Demo[/dim]",
+        border_style="blue"
+    ))
+
+    try:
+        async with SpotifyClient() as client:
+            # Execute all operations
+            await get_user_info(client)
+            await display_user_playlists(client)
+            tracks = await search_and_display_tracks(client)
+            playlist = await create_test_playlist(client)
+            await add_tracks_to_playlist(client, playlist, tracks)
+            await display_updated_playlist(client, playlist)
+            # NOTE: for now just display the first track's info
+            display_track_info(tracks[0])
+
+            # Success message
+            display_success()
+
+    except SpotifyAuthError as e:
+        display_error(
+            "Authentication Error",
+            str(e),
+            "Make sure your .env file contains valid Spotify credentials."
+        )
+        sys.exit(1)
+    except SpotifyAPIError as e:
+        display_error("API Error", str(e))
+        sys.exit(1)
+    except Exception as e:
+        display_error("Unexpected Error", str(e))
+        sys.exit(1)
