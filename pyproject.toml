@@ -19,7 +19,6 @@ dependencies = [
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
     "rich>=14.0.0",
-    "typer>=0.16.0",
     "fastapi>=0.116.1",
     "uvicorn>=0.35.0",
 ]
@@ -52,7 +51,7 @@ lint.ignore = [
 # Import sorting configuration
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
-known-third-party = ["httpx", "pydantic", "rich", "typer", "fastapi", "uvicorn"]
+known-third-party = ["httpx", "pydantic", "rich", "fastapi", "uvicorn"]
 section-order = [
     "future",
     "standard-library",
