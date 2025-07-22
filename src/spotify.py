@@ -10,6 +10,7 @@ from urllib.parse import urlencode
 import httpx
 from pydantic import ValidationError
 
+from .auth_server import AuthServer
 from .config import SpotifyConfig
 from .models import (
     AudioFeatures,
@@ -18,8 +19,6 @@ from .models import (
     Track,
     User,
 )
-
-from .auth_server import AuthServer
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +82,7 @@ class SpotifyClient:
     def client(self) -> httpx.AsyncClient:
         """
         Get or create HTTP client.
-        
+
         Uses httpx over requests/aiohttp because:
         - Native async/await support (requests is sync-only)
         - Simple requests-like API (aiohttp is more verbose)
