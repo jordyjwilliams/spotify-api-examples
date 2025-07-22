@@ -62,3 +62,11 @@ class SpotifyClient:
             await self._client.aclose()
             self._client = None
 
+    @property
+    def client(self) -> httpx.AsyncClient:
+        if self._client is None:
+            self._client = httpx.AsyncClient(
+                timeout=self.config.timeout,
+                limits=httpx.Limits(max_keepalive_connections=5, max_connections=10),
+            )
+        return self._client
