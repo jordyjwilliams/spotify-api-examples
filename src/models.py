@@ -67,3 +67,27 @@ class Artist(BaseModel):
             raise ValueError('Artist URI must start with "spotify:artist:"')
         return v
 
+
+class Album(BaseModel):
+    """Spotify album object."""
+
+    id: str
+    name: str
+    album_type: str
+    artists: list[Artist]
+    external_urls: ExternalUrls
+    href: HttpUrl
+    images: list[Image] | None = []
+    release_date: str
+    release_date_precision: str
+    type: str = "album"
+    uri: str
+
+    @field_validator("uri")
+    @classmethod
+    def validate_uri(cls, v: str) -> str:
+        """Validate that URI follows Spotify format."""
+        if not v.startswith("spotify:album:"):
+            raise ValueError('Album URI must start with "spotify:album:"')
+        return v
+
