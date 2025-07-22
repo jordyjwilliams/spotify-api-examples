@@ -238,3 +238,15 @@ class SpotifyClient:
         """Get current user information."""
         data = await self._make_request("GET", "/me")
         return User.model_validate(data)
+
+    async def get_user_playlists(
+        self, user_id: str | None = None, limit: int = 20, offset: int = 0
+    ) -> list[dict[str, Any]]:
+        """Get user's playlists."""
+        user = user_id or self._user_id or (await self.get_current_user()).id
+        params = {"limit": str(limit), "offset": str(offset)}
+
+        data = await self._make_request(
+            "GET", f"/users/{user}/playlists", params=params
+        )
+        return data["items"]
