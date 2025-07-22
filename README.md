@@ -45,8 +45,31 @@ Secure examples and tools for working with the [Spotify Web API](https://develop
 3. Add `http://localhost:8888/callback` to your Redirect URIs
 4. Copy your Client ID and Client Secret
 
-## 🎯 Usage
-### Python API
+## 🔐 Authentication & Token Persistence
+
+The library uses Spotify's OAuth 2.0 Authorization Code flow for secure authentication. Here's how it works:
+
+### First-Time Authentication
+
+When you run the library for the first time:
+
+1. **Browser Opens**: A browser window will open to Spotify's authorization page
+2. **User Consent**: You'll be asked to authorize the app to access your Spotify account
+3. **Token Exchange**: The library exchanges the authorization code for access and refresh tokens
+4. **Token Caching**: Tokens are automatically saved to `.spotify_token_cache.json` for future use
+    * This happens is this script and tooling here is primarily for local testing.
+
+### Subsequent Runs
+
+On subsequent runs, the library will:
+
+1. **Load Cached Tokens**: Automatically load tokens from the cache file
+2. **Validate Tokens**: Test the cached tokens to ensure they're still valid
+3. **Use Cached Tokens**: If valid, use them directly without re-authentication
+4. **Auto-Refresh**: If access token expires, automatically refresh using the refresh token
+5. **Re-authenticate**: Only if tokens are completely invalid (e.g., revoked by user)
+
+### Token Cache Management
 
 ```python
 from src.spotify import SpotifyClient
