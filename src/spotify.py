@@ -43,3 +43,16 @@ class SpotifyClient:
         except ValidationError as e:
             raise SpotifyAuthError(f"Invalid configuration: {e}") from e
 
+    async def __aenter__(self):
+        """Async context manager entry.
+        Ensures authentication happens automatically when entering the context.
+        """
+        await self._ensure_authenticated()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit.
+        Ensures proper cleanup of the HTTP client when exiting the context
+        """
+        await self.close()
+
