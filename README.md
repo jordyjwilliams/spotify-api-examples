@@ -45,6 +45,67 @@ Secure examples and tools for working with the [Spotify Web API](https://develop
 3. Add `http://localhost:8888/callback` to your Redirect URIs
 4. Copy your Client ID and Client Secret
 
+## 🎯 Usage
+### Python API
+
+```python
+from src.spotify import SpotifyClient
+
+async with SpotifyClient() as client:
+    # Get user's playlists
+    playlists = await client.get_user_playlists()
+    
+    # Create a new playlist
+    playlist = await client.create_playlist(
+        name="My Playlist",
+        description="A test playlist"
+    )
+    
+    # Add tracks
+    await client.add_tracks_to_playlist(
+        playlist_id=playlist.id,
+        track_ids=["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]
+    )
+```
+
+## 📚 Examples
+
+### Basic Playlist Operations
+
+```python
+from src.spotify import SpotifyClient
+
+async def main():
+    async with SpotifyClient() as client:
+        # Get current user's playlists
+        playlists = await client.get_user_playlists()
+        print(f"Found {len(playlists)} playlists")
+        
+        # Get a specific playlist
+        playlist = await client.get_playlist("37i9dQZF1DXcBWIGoYBM5M")
+        print(f"Playlist: {playlist.name}")
+        print(f"Tracks: {playlist.tracks.total}")
+```
+
+### Creating and Managing Playlists
+
+```python
+async def create_playlist_example():
+    async with SpotifyClient() as client:
+        # Create a new playlist
+        playlist = await client.create_playlist(
+            name="My Awesome Playlist",
+            description="Created with Spotify API",
+            public=False
+        )
+        
+        # Add tracks by search
+        tracks = await client.search_tracks("artist:Queen")
+        track_uris = [track.uri for track in tracks[:5]]
+        
+        await client.add_tracks_to_playlist(playlist.id, track_uris)
+        print(f"Added {len(track_uris)} tracks to {playlist.name}")
+```
 ## 🔧 Development
 
 ### Code Quality
