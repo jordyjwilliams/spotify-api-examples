@@ -96,3 +96,16 @@ class AuthServer:
         self._server = uvicorn.Server(config)
         self._server_task = asyncio.create_task(self._server.serve())
 
+    async def stop(self):
+        """Stop the FastAPI server."""
+        if self._server_task:
+            self._server_task.cancel()
+            try:
+                await self._server_task
+            except asyncio.CancelledError:
+                # This is expected when cancelling the task
+                pass
+            except Exception as e:
+                # Log any other errors but don't raise them
+                print(f"Warning: Error stopping auth server: {e}")
+
