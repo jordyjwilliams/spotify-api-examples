@@ -79,3 +79,20 @@ class AuthServer:
             </html>
             """
         )
+
+    async def start(self):
+        """Start the FastAPI server."""
+        config = uvicorn.Config(
+            self.app,
+            host=self.host,
+            port=self.port,
+            # Only show critical errors
+            # NOTE: If this was `error` error on early exit.
+            # This could probably be handled nicer. But for now this works.
+            log_level="critical",
+            access_log=False,
+            loop="asyncio",
+        )
+        self._server = uvicorn.Server(config)
+        self._server_task = asyncio.create_task(self._server.serve())
+
