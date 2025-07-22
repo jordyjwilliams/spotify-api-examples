@@ -378,3 +378,12 @@ class SpotifyClient:
 
         data = await self._make_request("GET", "/search", params=params)
         return SearchResult.model_validate(data)
+
+    async def search_tracks(
+        self, query: str, market: str | None = None, limit: int = 20, offset: int = 0
+    ) -> list[Track]:
+        """Search for tracks."""
+        result = await self.search(query, ["track"], market, limit, offset)
+        if result.tracks and "items" in result.tracks:
+            return [Track.model_validate(item) for item in result.tracks["items"]]
+        return []
