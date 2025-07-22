@@ -190,16 +190,14 @@ uv run ruff check . && uv run ruff format --check . && uv run pyright
 spotify-api-examples/
 ├── src/
 │   ├── __init__.py
-│   ├── cli.py              # CLI interface
 │   ├── config.py           # Configuration management
 │   ├── models.py           # Pydantic models
 │   ├── spotify.py          # Main Spotify client
-│   └── utils.py            # Utility functions
+# NOTE: tests have not been written yet! TODO
 ├── tests/
 │   ├── __init__.py
 │   ├── conftest.py         # Test configuration
-│   ├── test_playlists.py   # Playlist tests
-│   └── test_spotify.py     # Client tests
+│   ├── test_models.py      # Model tests
 ├── .env.example            # Environment template
 ├── .gitignore
 ├── pyproject.toml          # Project configuration
