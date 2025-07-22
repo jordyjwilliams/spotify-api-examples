@@ -32,7 +32,9 @@ class TestPlaylistClient:
         client = PlaylistClient(mock_base_client)
         assert client._client == mock_base_client
 
-    async def test_get_user_playlists_with_user_id(self, playlist_client, mock_base_client):
+    async def test_get_user_playlists_with_user_id(
+        self, playlist_client, mock_base_client
+    ):
         """Test get_user_playlists with explicit user_id."""
         mock_response = {
             "items": [
@@ -42,14 +44,20 @@ class TestPlaylistClient:
         }
         mock_base_client._make_request.return_value = mock_response
 
-        result = await playlist_client.get_user_playlists("explicit_user_id", limit=10, offset=5)
+        result = await playlist_client.get_user_playlists(
+            "explicit_user_id", limit=10, offset=5
+        )
 
         mock_base_client._make_request.assert_called_once_with(
-            "GET", "/users/explicit_user_id/playlists", params={"limit": "10", "offset": "5"}
+            "GET",
+            "/users/explicit_user_id/playlists",
+            params={"limit": "10", "offset": "5"},
         )
         assert result == mock_response["items"]
 
-    async def test_get_user_playlists_with_cached_user_id(self, playlist_client, mock_base_client):
+    async def test_get_user_playlists_with_cached_user_id(
+        self, playlist_client, mock_base_client
+    ):
         """Test get_user_playlists with cached user_id."""
         mock_response = {
             "items": [
@@ -61,11 +69,15 @@ class TestPlaylistClient:
         result = await playlist_client.get_user_playlists()
 
         mock_base_client._make_request.assert_called_once_with(
-            "GET", "/users/test_user_id/playlists", params={"limit": "20", "offset": "0"}
+            "GET",
+            "/users/test_user_id/playlists",
+            params={"limit": "20", "offset": "0"},
         )
         assert result == mock_response["items"]
 
-    async def test_get_user_playlists_with_current_user(self, playlist_client, mock_base_client):
+    async def test_get_user_playlists_with_current_user(
+        self, playlist_client, mock_base_client
+    ):
         """Test get_user_playlists with current user lookup."""
         mock_base_client._user_id = None
         mock_user = Mock()
@@ -79,7 +91,9 @@ class TestPlaylistClient:
 
         mock_base_client.get_current_user.assert_called_once()
         mock_base_client._make_request.assert_called_once_with(
-            "GET", "/users/current_user_id/playlists", params={"limit": "20", "offset": "0"}
+            "GET",
+            "/users/current_user_id/playlists",
+            params={"limit": "20", "offset": "0"},
         )
         assert result == mock_response["items"]
 
@@ -89,10 +103,14 @@ class TestPlaylistClient:
 
         result = await playlist_client.get_playlist("playlist1")
 
-        mock_base_client._make_request.assert_called_once_with("GET", "/playlists/playlist1", params={})
+        mock_base_client._make_request.assert_called_once_with(
+            "GET", "/playlists/playlist1", params={}
+        )
         assert result.id == "playlist1"
 
-    async def test_create_playlist_with_user_id(self, playlist_client, mock_base_client):
+    async def test_create_playlist_with_user_id(
+        self, playlist_client, mock_base_client
+    ):
         """Test create_playlist with explicit user_id."""
         mock_base_client._make_request.return_value = MOCK_PLAYLIST_DATA
 
@@ -101,38 +119,46 @@ class TestPlaylistClient:
             "Test Description",
             user_id="explicit_user_id",
             public=True,
-            collaborative=False
+            collaborative=False,
         )
 
         mock_base_client._make_request.assert_called_once_with(
-            "POST", "/users/explicit_user_id/playlists",
+            "POST",
+            "/users/explicit_user_id/playlists",
             data={
                 "name": "New Playlist",
                 "description": "Test Description",
                 "public": True,
-                "collaborative": False
-            }
+                "collaborative": False,
+            },
         )
         assert result.id == "playlist1"
 
-    async def test_create_playlist_with_cached_user_id(self, playlist_client, mock_base_client):
+    async def test_create_playlist_with_cached_user_id(
+        self, playlist_client, mock_base_client
+    ):
         """Test create_playlist with cached user_id."""
         mock_base_client._make_request.return_value = MOCK_PLAYLIST_DATA
 
-        result = await playlist_client.create_playlist("New Playlist", "Test Description")
+        result = await playlist_client.create_playlist(
+            "New Playlist", "Test Description"
+        )
 
         mock_base_client._make_request.assert_called_once_with(
-            "POST", "/users/test_user_id/playlists",
+            "POST",
+            "/users/test_user_id/playlists",
             data={
                 "name": "New Playlist",
                 "description": "Test Description",
                 "public": True,
-                "collaborative": False
-            }
+                "collaborative": False,
+            },
         )
         assert result.id == "playlist1"
 
-    async def test_create_playlist_with_current_user(self, playlist_client, mock_base_client):
+    async def test_create_playlist_with_current_user(
+        self, playlist_client, mock_base_client
+    ):
         """Test create_playlist with current user lookup."""
         mock_base_client._user_id = None
         mock_user = Mock()
@@ -140,17 +166,20 @@ class TestPlaylistClient:
         mock_base_client.get_current_user.return_value = mock_user
         mock_base_client._make_request.return_value = MOCK_PLAYLIST_DATA
 
-        result = await playlist_client.create_playlist("New Playlist", "Test Description")
+        result = await playlist_client.create_playlist(
+            "New Playlist", "Test Description"
+        )
 
         mock_base_client.get_current_user.assert_called_once()
         mock_base_client._make_request.assert_called_once_with(
-            "POST", "/users/current_user_id/playlists",
+            "POST",
+            "/users/current_user_id/playlists",
             data={
                 "name": "New Playlist",
                 "description": "Test Description",
                 "public": True,
-                "collaborative": False
-            }
+                "collaborative": False,
+            },
         )
         assert result.id == "playlist1"
 
@@ -158,23 +187,29 @@ class TestPlaylistClient:
         """Test add_tracks_to_playlist method."""
         mock_base_client._make_request.return_value = {"snapshot_id": "new_snapshot"}
 
-        result = await playlist_client.add_tracks_to_playlist("playlist1", ["track1", "track2"], position=5)
+        result = await playlist_client.add_tracks_to_playlist(
+            "playlist1", ["track1", "track2"], position=5
+        )
 
         mock_base_client._make_request.assert_called_once_with(
-            "POST", "/playlists/playlist1/tracks",
-            data={"uris": ["track1", "track2"], "position": 5}
+            "POST",
+            "/playlists/playlist1/tracks",
+            data={"uris": ["track1", "track2"], "position": 5},
         )
         assert result == "new_snapshot"
 
-    async def test_add_tracks_to_playlist_no_position(self, playlist_client, mock_base_client):
+    async def test_add_tracks_to_playlist_no_position(
+        self, playlist_client, mock_base_client
+    ):
         """Test add_tracks_to_playlist without position."""
         mock_base_client._make_request.return_value = {"snapshot_id": "new_snapshot"}
 
-        result = await playlist_client.add_tracks_to_playlist("playlist1", ["track1", "track2"])
+        result = await playlist_client.add_tracks_to_playlist(
+            "playlist1", ["track1", "track2"]
+        )
 
         mock_base_client._make_request.assert_called_once_with(
-            "POST", "/playlists/playlist1/tracks",
-            data={"uris": ["track1", "track2"]}
+            "POST", "/playlists/playlist1/tracks", data={"uris": ["track1", "track2"]}
         )
         assert result == "new_snapshot"
 
@@ -182,23 +217,29 @@ class TestPlaylistClient:
         """Test remove_tracks_from_playlist method."""
         mock_base_client._make_request.return_value = {"snapshot_id": "new_snapshot"}
 
-        result = await playlist_client.remove_tracks_from_playlist("playlist1", ["track1", "track2"], "old_snapshot")
+        result = await playlist_client.remove_tracks_from_playlist(
+            "playlist1", ["track1", "track2"], "old_snapshot"
+        )
 
         mock_base_client._make_request.assert_called_once_with(
-            "DELETE", "/playlists/playlist1/tracks",
-            data={"uris": ["track1", "track2"], "snapshot_id": "old_snapshot"}
+            "DELETE",
+            "/playlists/playlist1/tracks",
+            data={"uris": ["track1", "track2"], "snapshot_id": "old_snapshot"},
         )
         assert result == "new_snapshot"
 
-    async def test_remove_tracks_from_playlist_no_snapshot(self, playlist_client, mock_base_client):
+    async def test_remove_tracks_from_playlist_no_snapshot(
+        self, playlist_client, mock_base_client
+    ):
         """Test remove_tracks_from_playlist without snapshot."""
         mock_base_client._make_request.return_value = {"snapshot_id": "new_snapshot"}
 
-        result = await playlist_client.remove_tracks_from_playlist("playlist1", ["track1", "track2"])
+        result = await playlist_client.remove_tracks_from_playlist(
+            "playlist1", ["track1", "track2"]
+        )
 
         mock_base_client._make_request.assert_called_once_with(
-            "DELETE", "/playlists/playlist1/tracks",
-            data={"uris": ["track1", "track2"]}
+            "DELETE", "/playlists/playlist1/tracks", data={"uris": ["track1", "track2"]}
         )
         assert result == "new_snapshot"
 
@@ -211,17 +252,18 @@ class TestPlaylistClient:
             name="Updated Name",
             description="Updated Description",
             public=False,
-            collaborative=True
+            collaborative=True,
         )
 
         mock_base_client._make_request.assert_called_once_with(
-            "PUT", "/playlists/playlist1",
+            "PUT",
+            "/playlists/playlist1",
             data={
                 "name": "Updated Name",
                 "description": "Updated Description",
                 "public": False,
-                "collaborative": True
-            }
+                "collaborative": True,
+            },
         )
         assert result is None
 
@@ -232,7 +274,6 @@ class TestPlaylistClient:
         result = await playlist_client.update_playlist("playlist1", name="Updated Name")
 
         mock_base_client._make_request.assert_called_once_with(
-            "PUT", "/playlists/playlist1",
-            data={"name": "Updated Name"}
+            "PUT", "/playlists/playlist1", data={"name": "Updated Name"}
         )
         assert result is None

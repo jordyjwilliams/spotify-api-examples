@@ -21,7 +21,7 @@ MOCK_TOKENS = {
     "access_token": TEST_ACCESS_TOKEN,
     "refresh_token": TEST_REFRESH_TOKEN,
     "expires_in": 3600,
-    "token_type": "Bearer"
+    "token_type": "Bearer",
 }
 
 # Mock user data
@@ -30,7 +30,7 @@ MOCK_USER_DATA = {
     "display_name": "Test User",
     "external_urls": {"spotify": f"https://open.spotify.com/user/{TEST_USER_ID}"},
     "href": f"https://api.spotify.com/v1/users/{TEST_USER_ID}",
-    "uri": f"spotify:user:{TEST_USER_ID}"
+    "uri": f"spotify:user:{TEST_USER_ID}",
 }
 
 # Mock artist data
@@ -39,7 +39,7 @@ MOCK_ARTIST_DATA = {
     "name": "Test Artist",
     "external_urls": {"spotify": "https://open.spotify.com/artist/artist1"},
     "href": "https://api.spotify.com/v1/artists/artist1",
-    "uri": "spotify:artist:artist1"
+    "uri": "spotify:artist:artist1",
 }
 
 # Mock album data
@@ -52,7 +52,7 @@ MOCK_ALBUM_DATA = {
     "href": "https://api.spotify.com/v1/albums/album1",
     "release_date": "2023-01-01",
     "release_date_precision": "day",
-    "uri": "spotify:album:album1"
+    "uri": "spotify:album:album1",
 }
 
 # Mock track data
@@ -69,7 +69,7 @@ MOCK_TRACK_DATA = {
     "is_local": False,
     "popularity": 50,
     "track_number": 1,
-    "uri": "spotify:track:track1"
+    "uri": "spotify:track:track1",
 }
 
 # Mock playlist data
@@ -87,9 +87,9 @@ MOCK_PLAYLIST_DATA = {
         "items": [],
         "limit": 100,
         "offset": 0,
-        "total": 0
+        "total": 0,
     },
-    "uri": "spotify:playlist:playlist1"
+    "uri": "spotify:playlist:playlist1",
 }
 
 # Mock playlist track data (for PlaylistTrack objects)
@@ -97,7 +97,7 @@ MOCK_PLAYLIST_TRACK_DATA = {
     "added_at": "2023-01-01T00:00:00Z",
     "added_by": MOCK_USER_DATA,
     "is_local": False,
-    "track": MOCK_TRACK_DATA
+    "track": MOCK_TRACK_DATA,
 }
 
 

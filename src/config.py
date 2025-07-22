@@ -78,13 +78,13 @@ class SpotifyConfig(BaseModel):
         redirect_uri = HttpUrl(redirect_uri_str)
 
         # TODO: set these defaults nicer.
-        # NOTE: not all of these are exposed in the `.env.example` But for now this works.        
+        # NOTE: not all of these are exposed in the `.env.example` But for now this works.
         # Handle invalid integer values from `getenv`gracefully
         # Parse integer values (will raise ValueError if invalid)
         cache_ttl = int(os.getenv("SPOTIFY_CACHE_TTL", "3600"))
         timeout = int(os.getenv("SPOTIFY_TIMEOUT", "30"))
         max_retries = int(os.getenv("SPOTIFY_MAX_RETRIES", "3"))
-        
+
         return cls(
             client_id=os.getenv("SPOTIFY_CLIENT_ID", ""),
             client_secret=os.getenv("SPOTIFY_CLIENT_SECRET", ""),

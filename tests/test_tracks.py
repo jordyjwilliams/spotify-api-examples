@@ -43,12 +43,7 @@ class TestTrackClient:
     async def test_search_tracks_with_results(self, track_client, mock_base_client):
         """Test search_tracks with results."""
         mock_search_response = {
-            "tracks": {
-                "items": [MOCK_TRACK_DATA],
-                "total": 1,
-                "limit": 20,
-                "offset": 0
-            }
+            "tracks": {"items": [MOCK_TRACK_DATA], "total": 1, "limit": 20, "offset": 0}
         }
         mock_base_client.search.return_value = mock_search_response
 
@@ -62,7 +57,9 @@ class TestTrackClient:
 
     async def test_search_tracks_no_results(self, track_client, mock_base_client):
         """Test search_tracks with no results."""
-        mock_search_response = {"tracks": {"items": [], "total": 0, "limit": 20, "offset": 0}}
+        mock_search_response = {
+            "tracks": {"items": [], "total": 0, "limit": 20, "offset": 0}
+        }
         mock_base_client.search.return_value = mock_search_response
 
         result = await track_client.search_tracks("nonexistent")
@@ -88,14 +85,16 @@ class TestTrackClient:
 
         assert result == []
 
-    async def test_search_tracks_default_parameters(self, track_client, mock_base_client):
+    async def test_search_tracks_default_parameters(
+        self, track_client, mock_base_client
+    ):
         """Test search_tracks with default parameters."""
-        mock_search_response = {"tracks": {"items": [], "total": 0, "limit": 20, "offset": 0}}
+        mock_search_response = {
+            "tracks": {"items": [], "total": 0, "limit": 20, "offset": 0}
+        }
         mock_base_client.search.return_value = mock_search_response
 
         result = await track_client.search_tracks("test")
 
-        mock_base_client.search.assert_called_once_with(
-            "test", ["track"], None, 20, 0
-        )
+        mock_base_client.search.assert_called_once_with("test", ["track"], None, 20, 0)
         assert result == []

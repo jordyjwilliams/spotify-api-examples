@@ -18,11 +18,14 @@ class TestModels:
         assert user.display_name == "Test User"
         assert user.uri == "spotify:user:user123"
 
-    @pytest.mark.parametrize("invalid_uri", [
-        "spotify:track:track1",  # Wrong type
-        "http://example.com/user",  # Not spotify URI
-        "invalid:user:user123",  # Wrong format
-    ])
+    @pytest.mark.parametrize(
+        "invalid_uri",
+        [
+            "spotify:track:track1",  # Wrong type
+            "http://example.com/user",  # Not spotify URI
+            "invalid:user:user123",  # Wrong format
+        ],
+    )
     def test_user_model_invalid_uri(self, mock_user_data, invalid_uri):
         """Test User model with invalid URIs."""
         invalid_data = mock_user_data.copy()
@@ -75,13 +78,18 @@ class TestModels:
         assert simplified["name"] == "Test Playlist"
         assert simplified["owner"].id == "user123"
 
-    @pytest.mark.parametrize("duration_ms,expected_seconds,expected_formatted", [
-        (60000, 60.0, "1:00"),
-        (125000, 125.0, "2:05"),
-        (3600000, 3600.0, "60:00"),
-        (0, 0.0, "0:00"),
-    ])
-    def test_track_duration_properties(self, mock_track_data, duration_ms, expected_seconds, expected_formatted):
+    @pytest.mark.parametrize(
+        "duration_ms,expected_seconds,expected_formatted",
+        [
+            (60000, 60.0, "1:00"),
+            (125000, 125.0, "2:05"),
+            (3600000, 3600.0, "60:00"),
+            (0, 0.0, "0:00"),
+        ],
+    )
+    def test_track_duration_properties(
+        self, mock_track_data, duration_ms, expected_seconds, expected_formatted
+    ):
         """Test Track duration properties."""
         track_data = mock_track_data.copy()
         track_data["duration_ms"] = duration_ms
@@ -90,12 +98,17 @@ class TestModels:
         assert track.duration_seconds == expected_seconds
         assert track.duration_formatted == expected_formatted
 
-    @pytest.mark.parametrize("track_count,expected_duration", [
-        (0, 0),
-        (1, 180000),
-        (3, 540000),
-    ])
-    def test_playlist_duration_properties(self, mock_playlist_data, track_count, expected_duration):
+    @pytest.mark.parametrize(
+        "track_count,expected_duration",
+        [
+            (0, 0),
+            (1, 180000),
+            (3, 540000),
+        ],
+    )
+    def test_playlist_duration_properties(
+        self, mock_playlist_data, track_count, expected_duration
+    ):
         """Test Playlist duration properties."""
         from tests.test_utils import MOCK_PLAYLIST_TRACK_DATA
 
