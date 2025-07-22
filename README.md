@@ -67,6 +67,26 @@ async with SpotifyClient() as client:
         track_ids=["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]
     )
 ```
+
+## 📚 Examples
+
+### Basic Playlist Operations
+
+```python
+from src.spotify import SpotifyClient
+
+async def main():
+    async with SpotifyClient() as client:
+        # Get current user's playlists
+        playlists = await client.get_user_playlists()
+        print(f"Found {len(playlists)} playlists")
+        
+        # Get a specific playlist
+        playlist = await client.get_playlist("37i9dQZF1DXcBWIGoYBM5M")
+        print(f"Playlist: {playlist.name}")
+        print(f"Tracks: {playlist.tracks.total}")
+```
+
 ### Creating and Managing Playlists
 
 ```python
