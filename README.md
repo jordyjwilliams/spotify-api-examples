@@ -11,12 +11,14 @@ Secure examples and tools for working with the [Spotify Web API](https://develop
 
 ## 🚀 Features
 
+- **Modular architecture** with specialized clients for different API domains
 - **Secure credential management** using environment variables and `.env` files
 - **Type-safe API interactions** with Pydantic models
 - **Modern Python tooling** with uv, ruff, and pyright
 - **Comprehensive examples** for all playlist endpoints
 - **Token persistence** for seamless authentication
 - **Async support** for high-performance operations
+- **Extensible design** for easy addition of new API endpoints
 
 ## 📋 Prerequisites
 
@@ -72,7 +74,7 @@ On subsequent runs, the library will:
 ### Token Cache Management
 
 ```python
-from src.spotify import SpotifyClient
+from src.spotify_client import SpotifyClient
 
 # Clear the authentication cache (forces re-authentication)
 client = SpotifyClient()
@@ -80,6 +82,7 @@ client.clear_auth_cache()
 ```
 
 ## 📚 Examples
+
 ## 🎯 Quick Start
 
 The easiest way to get started is with the comprehensive example script:
@@ -87,6 +90,7 @@ The easiest way to get started is with the comprehensive example script:
 ```bash
 uv run python -m examples.basic_usage
 ```
+
 **What it demonstrates:**
 - User authentication and profile retrieval
 - Playlist management (create, read, update)
@@ -103,7 +107,7 @@ uv run python -m examples.basic_usage
 ### Basic Playlist Operations
 
 ```python
-from src.spotify import SpotifyClient
+from src.spotify_client import SpotifyClient
 
 async def main():
     async with SpotifyClient() as client:
@@ -155,7 +159,8 @@ async def search_example():
 ### Error Handling
 
 ```python
-from src.spotify import SpotifyClient, SpotifyAPIError
+from src.spotify_client import SpotifyClient
+from src.base_client import SpotifyAPIError
 
 async def error_handling_example():
     async with SpotifyClient() as client:
