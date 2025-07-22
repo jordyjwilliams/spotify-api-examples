@@ -64,6 +64,15 @@ class SpotifyClient:
 
     @property
     def client(self) -> httpx.AsyncClient:
+        """
+        Get or create HTTP client.
+        
+        Uses httpx over requests/aiohttp because:
+        - Native async/await support (requests is sync-only)
+        - Simple requests-like API (aiohttp is more verbose)
+        - HTTP/2 support and connection pooling
+        - Type hints and modern design
+        """
         if self._client is None:
             self._client = httpx.AsyncClient(
                 timeout=self.config.timeout,
