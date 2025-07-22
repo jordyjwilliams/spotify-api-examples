@@ -387,3 +387,8 @@ class SpotifyClient:
         if result.tracks and "items" in result.tracks:
             return [Track.model_validate(item) for item in result.tracks["items"]]
         return []
+
+    async def get_track_audio_features(self, track_id: str) -> AudioFeatures:
+        """Get audio features for a track."""
+        data = await self._make_request("GET", f"/audio-features/{track_id}")
+        return AudioFeatures.model_validate(data)
