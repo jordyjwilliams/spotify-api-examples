@@ -339,3 +339,25 @@ class SpotifyClient:
             data["collaborative"] = collaborative
 
         await self._make_request("PUT", f"/playlists/{playlist_id}", data=data)
+
+    async def search(
+        self,
+        query: str,
+        types: list[str] | None = None,
+        market: str | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> SearchResult:
+        """Search for tracks, artists, albums, or playlists."""
+        params = {
+            "q": query,
+            "limit": str(limit),
+            "offset": str(offset),
+        }
+        if types:
+            params["type"] = ",".join(types)
+        if market:
+            params["market"] = market
+
+        data = await self._make_request("GET", "/search", params=params)
+        return SearchResult.model_validate(data)
