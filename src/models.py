@@ -207,6 +207,24 @@ class Playlist(BaseModel):
             return f"{hours}h {minutes}m"
         return f"{minutes}m"
 
+    def to_simplified(self) -> dict[str, Any]:
+        """Convert to simplified playlist for list views."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "collaborative": self.collaborative,
+            "description": self.description,
+            "external_urls": self.external_urls,
+            "href": self.href,
+            "images": self.images,
+            "owner": self.owner,
+            "primary_color": self.primary_color,
+            "public": self.public,
+            "snapshot_id": self.snapshot_id,
+            "tracks": {"total": self.tracks.total, "href": str(self.tracks.href)},
+            "type": self.type,
+            "uri": self.uri,
+        }
 class AudioFeatures(BaseModel):
     """Audio features for a track."""
 
