@@ -74,21 +74,9 @@ On subsequent runs, the library will:
 ```python
 from src.spotify import SpotifyClient
 
-async with SpotifyClient() as client:
-    # Get user's playlists
-    playlists = await client.get_user_playlists()
-    
-    # Create a new playlist
-    playlist = await client.create_playlist(
-        name="My Playlist",
-        description="A test playlist"
-    )
-    
-    # Add tracks
-    await client.add_tracks_to_playlist(
-        playlist_id=playlist.id,
-        track_ids=["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]
-    )
+# Clear the authentication cache (forces re-authentication)
+client = SpotifyClient()
+client.clear_auth_cache()
 ```
 
 ## 📚 Examples
