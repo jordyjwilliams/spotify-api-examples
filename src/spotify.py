@@ -451,12 +451,3 @@ class SpotifyClient:
         if result.tracks and "items" in result.tracks:
             return [Track.model_validate(item) for item in result.tracks["items"]]
         return []
-
-    async def get_track(self, track_id: str, market: str | None = None) -> Track:
-        """Get track details."""
-        params = {}
-        if market:
-            params["market"] = market
-
-        data = await self._make_request("GET", f"/tracks/{track_id}", params=params)
-        return Track.model_validate(data)
