@@ -59,8 +59,3 @@ class SpotifyClient(BaseSpotifyClient):
     async def search_tracks(self, query, market=None, limit=20, offset=0):
         """Search for tracks."""
         return await self.tracks.search_tracks(query, market, limit, offset)
-
-    async def get_user_country(self):
-        """Get user's country."""
-        user_data = await self._make_request("GET", "/me")
-        return user_data.get("country")
