@@ -3,6 +3,7 @@
 import tomllib
 from pathlib import Path
 
+from .models import Playlist, Track, User
 def _get_version() -> str:
     """Get version from pyproject.toml."""
     try:
@@ -14,5 +15,7 @@ def _get_version() -> str:
     except (FileNotFoundError, KeyError, tomllib.TOMLDecodeError):
         return "0.1.0"  # fallback version
 
+
 __version__ = _get_version()
 
+__all__ = ["Playlist", "Track", "User"]
