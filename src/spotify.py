@@ -3,11 +3,11 @@
 import base64
 import json
 import logging
-import secrets
-import webbrowser
 from pathlib import Path
+import secrets
 from typing import Any
 from urllib.parse import urlencode
+import webbrowser
 
 import httpx
 from pydantic import ValidationError
