@@ -124,3 +124,20 @@ class AuthServer:
 
         raise Exception("Authentication timeout")
 
+    @asynccontextmanager
+    async def serve(self):
+        """Context manager for serving the auth server."""
+        await self.start()
+        try:
+            yield self
+        finally:
+            # Graceful shutdown
+            if self._server and hasattr(self._server, "should_exit"):
+                self._server.should_exit = True
+            # Use a timeout to avoid hanging
+            try:
+                await asyncio.wait_for(self.stop(), timeout=1.0)
+            except TimeoutError:
+                # Force cancel if timeout
+                if self._server_task:
+                    self._server_task.cancel()
