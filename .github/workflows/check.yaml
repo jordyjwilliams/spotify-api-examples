@@ -59,7 +59,9 @@ jobs:
 
     - name: Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
+      # Here we don't want to comment on each matrix run.
+      # NOTE: slight hack but this functions.
+      if: always() && matrix.python-version == '3.12'
       with:
         files: "test-results.xml"
         comment_mode: always
