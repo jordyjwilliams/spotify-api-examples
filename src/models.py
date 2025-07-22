@@ -135,3 +135,13 @@ class Track(BaseModel):
         seconds = total_seconds % 60
         return f"{minutes}:{seconds:02d}"
 
+
+class PlaylistTrack(BaseModel):
+    """Track within a playlist context."""
+
+    added_at: datetime
+    added_by: User
+    is_local: bool
+    primary_color: str | None = None
+    track: Track
+    video_thumbnail: dict[str, Any] | None = None
