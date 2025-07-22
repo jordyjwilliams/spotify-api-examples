@@ -28,6 +28,7 @@ dependencies = [
 dev = [
     "pyright>=1.1.403",
     "pytest>=8.4.1",
+    "pytest-asyncio>=0.24.0",
     "pytest-cov>=6.2.1",
     "ruff>=0.12.4",
 ]
@@ -84,6 +85,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+asyncio_mode = "auto"
 addopts = [
     "--strict-markers",
     "--strict-config",
