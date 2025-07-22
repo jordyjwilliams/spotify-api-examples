@@ -185,3 +185,9 @@ class SpotifyClient:
             self._refresh_token = token_data["refresh_token"]
 
         logger.info("Successfully refreshed access token")
+
+    async def _get_user_id(self):
+        """Get current user ID."""
+        user = await self.get_current_user()
+        self._user_id = user.id
+
