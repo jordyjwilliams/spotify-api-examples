@@ -198,3 +198,17 @@ async def main():
     except Exception as e:
         display_error("Unexpected Error", str(e))
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    # Check if .env file exists
+    env_file = Path(__file__).parent.parent / ".env"
+    if not env_file.exists():
+        console.print(Panel.fit(
+            "[bold red]❌ .env file not found![/bold red]\n\n[dim]Please copy env.example to .env and add your Spotify credentials.[/dim]",
+            border_style="red"
+        ))
+        sys.exit(1)
+
+    # Run the example
+    asyncio.run(main())
