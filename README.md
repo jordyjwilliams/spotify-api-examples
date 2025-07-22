@@ -62,3 +62,25 @@ uv run pyright
 # Run all checks
 uv run ruff check . && uv run ruff format --check . && uv run pyright
 ```
+## 🏗️ Project Structure
+
+```
+spotify-api-examples/
+├── src/
+│   ├── __init__.py
+│   ├── cli.py              # CLI interface
+│   ├── config.py           # Configuration management
+│   ├── models.py           # Pydantic models
+│   ├── spotify.py          # Main Spotify client
+│   └── utils.py            # Utility functions
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py         # Test configuration
+│   ├── test_playlists.py   # Playlist tests
+│   └── test_spotify.py     # Client tests
+├── .env.example            # Environment template
+├── .gitignore
+├── pyproject.toml          # Project configuration
+├── README.md
+└── LICENSE
+```
