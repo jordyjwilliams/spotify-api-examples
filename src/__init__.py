@@ -4,6 +4,9 @@ import tomllib
 from pathlib import Path
 
 from .models import Playlist, Track, User
+from .spotify import SpotifyClient
+
+
 def _get_version() -> str:
     """Get version from pyproject.toml."""
     try:
@@ -18,4 +21,4 @@ def _get_version() -> str:
 
 __version__ = _get_version()
 
-__all__ = ["Playlist", "Track", "User"]
+__all__ = ["SpotifyClient", "Playlist", "Track", "User"]
