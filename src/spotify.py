@@ -1,9 +1,26 @@
 """Main Spotify API client for playlist operations."""
+
+import base64
 import logging
+import secrets
+import webbrowser
+from typing import Any
+from urllib.parse import urlencode
+
 import httpx
 from pydantic import ValidationError
 
 from .config import SpotifyConfig
+from .models import (
+    AudioFeatures,
+    Playlist,
+    SearchResult,
+    Track,
+    User,
+)
+
+from .auth_server import AuthServer
+
 logger = logging.getLogger(__name__)
 
 
