@@ -30,3 +30,22 @@ class AuthServer:
         # Setup routes
         self.app.get("/callback")(self.callback_handler)
 
+    async def callback_handler(self, request: Request):
+        """Handle the OAuth callback from Spotify."""
+        params = dict(request.query_params)
+
+        # Check for errors
+        if "error" in params:
+            self.auth_error = params["error"]
+            return HTMLResponse(
+                f"""
+                <html>
+                <body>
+                    <h1>Authorization Error</h1>
+                    <p>There was an error during authorization: {self.auth_error}</p>
+                    <p>You can close this window and try again.</p>
+                </body>
+                </html>
+                """
+            )
+
