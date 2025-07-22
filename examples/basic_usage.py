@@ -25,8 +25,10 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
+from src.base_client import SpotifyAPIError, SpotifyAuthError
+
 # Import from the src package
-from src.spotify import SpotifyAPIError, SpotifyAuthError, SpotifyClient
+from src.spotify_client import SpotifyClient
 
 console = Console()
 

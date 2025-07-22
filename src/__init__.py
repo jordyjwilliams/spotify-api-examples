@@ -3,8 +3,9 @@
 from pathlib import Path
 import tomllib
 
+from .base_client import SpotifyAPIError, SpotifyAuthError
 from .models import Playlist, Track, User
-from .spotify import SpotifyClient
+from .spotify_client import SpotifyClient
 
 
 def _get_version() -> str:
@@ -21,4 +22,11 @@ def _get_version() -> str:
 
 __version__ = _get_version()
 
-__all__ = ["SpotifyClient", "Playlist", "Track", "User"]
+__all__ = [
+    "SpotifyClient",
+    "Playlist",
+    "Track",
+    "User",
+    "SpotifyAuthError",
+    "SpotifyAPIError",
+]
