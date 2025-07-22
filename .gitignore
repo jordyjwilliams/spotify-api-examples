@@ -145,6 +145,7 @@ env.bak/
 venv.bak/
 
 # Spotify API token cache
+# NOTE: This could probably be handled a lot nicer. But for now this will do.
 .spotify_token_cache.json
 
 # Spyder project settings
