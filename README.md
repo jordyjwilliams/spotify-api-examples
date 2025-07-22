@@ -136,6 +136,37 @@ async def create_playlist_example():
         await client.add_tracks_to_playlist(playlist.id, track_uris)
         print(f"Added {len(track_uris)} tracks to {playlist.name}")
 ```
+
+### Search and Discovery
+
+```python
+async def search_example():
+    async with SpotifyClient() as client:
+        # Search for tracks
+        tracks = await client.search_tracks("artist:Queen", limit=10)
+        
+        # Search for playlists
+        results = await client.search("workout", ["playlist"], limit=5)
+        playlists = results.playlists.items if results.playlists else []
+        
+        print(f"Found {len(tracks)} tracks and {len(playlists)} playlists")
+```
+
+### Error Handling
+
+```python
+from src.spotify import SpotifyClient, SpotifyAPIError
+
+async def error_handling_example():
+    async with SpotifyClient() as client:
+        try:
+            playlist = await client.get_playlist("invalid_playlist_id")
+        except SpotifyAPIError as e:
+            print(f"API Error: {e}")
+            print(f"Status Code: {e.status_code}")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+```
 ## 🔧 Development
 
 ### Code Quality
