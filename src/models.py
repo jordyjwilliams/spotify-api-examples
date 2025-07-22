@@ -228,3 +228,19 @@ class AudioFeatures(BaseModel):
     type: str = "audio_features"
     uri: str
     valence: float = Field(ge=0.0, le=1.0)
+
+
+class ErrorResponse(BaseModel):
+    """Spotify API error response."""
+
+    error: dict[str, Any]
+
+    @property
+    def status(self) -> int:
+        """Get HTTP status code."""
+        return self.error.get("status", 0)
+
+    @property
+    def message(self) -> str:
+        """Get error message."""
+        return self.error.get("message", "Unknown error")
