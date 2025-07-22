@@ -5,6 +5,7 @@ import tomllib
 
 from .models import Playlist, Track, User
 from .spotify_client import SpotifyClient
+from .base_client import SpotifyAuthError, SpotifyAPIError
 
 
 def _get_version() -> str:
@@ -21,4 +22,4 @@ def _get_version() -> str:
 
 __version__ = _get_version()
 
-__all__ = ["SpotifyClient", "Playlist", "Track", "User"]
+__all__ = ["SpotifyClient", "Playlist", "Track", "User", "SpotifyAuthError", "SpotifyAPIError"]
