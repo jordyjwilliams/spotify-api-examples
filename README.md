@@ -15,7 +15,7 @@ Secure examples and tools for working with the [Spotify Web API](https://develop
 - **Type-safe API interactions** with Pydantic models
 - **Modern Python tooling** with uv, ruff, and pyright
 - **Comprehensive examples** for all playlist endpoints
-- **CLI interface** for easy testing and exploration
+- **Token persistence** for seamless authentication
 - **Async support** for high-performance operations
 
 ## 📋 Prerequisites
