@@ -56,3 +56,9 @@ class SpotifyClient:
         """
         await self.close()
 
+    async def close(self):
+        """Close the HTTP client."""
+        if self._client:
+            await self._client.aclose()
+            self._client = None
+
