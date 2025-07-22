@@ -153,3 +153,11 @@ def display_success():
         border_style="green"
     ))
 
+
+def display_error(error_type: str, error_message: str, additional_info: str = ""):
+    """Display formatted error message."""
+    console.print(Panel.fit(
+        f"[bold red]❌ {error_type}[/bold red]\n[red]{error_message}[/red]\n\n[dim]{additional_info}[/dim]",
+        border_style="red"
+    ))
+
