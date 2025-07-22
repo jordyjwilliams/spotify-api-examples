@@ -77,6 +77,8 @@ class SpotifyConfig(BaseModel):
         redirect_uri_str = os.getenv("SPOTIFY_REDIRECT_URI", DEFAULT_REDIRECT_URI)
         redirect_uri = HttpUrl(redirect_uri_str)
 
+        # TODO: set these defaults nicer.
+        # NOTE: not all of these are exposed in the `.env.example` But for now this works.
         return cls(
             client_id=os.getenv("SPOTIFY_CLIENT_ID", ""),
             client_secret=os.getenv("SPOTIFY_CLIENT_SECRET", ""),
