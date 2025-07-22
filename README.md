@@ -234,6 +234,24 @@ uv run pyright
 
 # Run all checks
 uv run ruff check . && uv run ruff format --check . && uv run pyright
+
+### Testing
+
+The project includes a comprehensive test suite with **73+ tests** covering all major functionality:
+
+```bash
+# Run all tests
+uv run pytest tests/
+
+# Run tests with coverage
+uv run pytest tests/ --cov=src --cov-report=term-missing
+
+# Run specific test files
+uv run pytest tests/test_core.py -v
+uv run pytest tests/test_models.py -v
+
+# Run tests with detailed output
+uv run pytest tests/ -v --tb=short
 ```
 ## 🏗️ Project Structure
 
@@ -248,11 +266,12 @@ spotify-api-examples/
 │   ├── tracks.py           # Track operations
 │   ├── spotify_client.py   # Unified client
 │   └── auth_server.py      # OAuth callback server
-# NOTE: tests not written yet. TODO.
 ├── tests/
-│   ├── __init__.py
-│   ├── conftest.py         # Test configuration
-│   ├── test_models.py      # Model tests
+│   ├── test_config.py      # Configuration validation
+│   ├── test_core.py        # Core functionality tests
+│   ├── test_models.py      # Pydantic model tests
+│   ├── test_playlists.py   # Playlist operations
+│   └── test_tracks.py      # Track operations
 ├── examples/
 │   └── basic_usage.py      # Comprehensive example
 ├── .env.example            # Environment template
