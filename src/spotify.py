@@ -150,3 +150,38 @@ class SpotifyClient:
         self._refresh_token = token_data.get("refresh_token")
 
         logger.info("Successfully obtained access token")
+
+    async def _refresh_access_token(self):
+        """Refresh the access token using refresh token."""
+        if not self._refresh_token:
+            raise SpotifyAuthError("No refresh token available")
+
+        auth_header = base64.b64encode(
+            f"{self.config.client_id}:{self.config.client_secret}".encode()
+        ).decode()
+
+        data = {
+            "grant_type": "refresh_token",
+            "refresh_token": self._refresh_token,
+        }
+
+        headers = {
+            "Authorization": f"Basic {auth_header}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+
+        response = await self.client.post(
+            self.config.token_url, data=data, headers=headers
+        )
+
+        if response.status_code != 200:
+            raise SpotifyAuthError(f"Token refresh failed: {response.text}")
+
+        token_data = response.json()
+        self._access_token = token_data["access_token"]
+
+        # Update refresh token if provided
+        if "refresh_token" in token_data:
+            self._refresh_token = token_data["refresh_token"]
+
+        logger.info("Successfully refreshed access token")
