@@ -1,14 +1,21 @@
 name: Check
 
 on:
+  push:
+    branches: [ main, develop ]
   pull_request:
+    branches: [ main ]
 
 jobs:
-  check:
+  format-typecheck-lint-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: ["3.12", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -37,3 +44,25 @@ jobs:
 
     - name: Typechecking [pyright]
       run: uv run pyright
+
+    - name: Run Tests with Coverage
+      # NOTE: this is relatively low due to auth testing being excluded.
+      # Out of scope for now.
+      run: |
+        uv run pytest tests/ \
+          --cov=src \
+          --cov-report=xml \
+          --cov-report=term-missing \
+          --cov-fail-under=67 \
+          --junitxml=test-results.xml \
+          --tb=short
+
+    - name: Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      # Here we don't want to comment on each matrix run.
+      # NOTE: slight hack but this functions.
+      if: always() && matrix.python-version == '3.12'
+      with:
+        files: "test-results.xml"
+        comment_mode: always
+        compare_to_earlier_commit: true

@@ -19,7 +19,6 @@ dependencies = [
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
     "rich>=14.0.0",
-    "typer>=0.16.0",
     "fastapi>=0.116.1",
     "uvicorn>=0.35.0",
 ]
@@ -28,6 +27,7 @@ dependencies = [
 dev = [
     "pyright>=1.1.403",
     "pytest>=8.4.1",
+    "pytest-asyncio>=0.24.0",
     "pytest-cov>=6.2.1",
     "ruff>=0.12.4",
 ]
@@ -51,7 +51,7 @@ lint.ignore = [
 # Import sorting configuration
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
-known-third-party = ["httpx", "pydantic", "rich", "typer", "fastapi", "uvicorn"]
+known-third-party = ["httpx", "pydantic", "rich", "fastapi", "uvicorn"]
 section-order = [
     "future",
     "standard-library",
@@ -84,6 +84,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+asyncio_mode = "auto"
 addopts = [
     "--strict-markers",
     "--strict-config",
@@ -91,10 +92,7 @@ addopts = [
     "--cov-report=term-missing",
     "--cov-report=html",
 ]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-]
+markers = []
 
 [tool.coverage.run]
 source = ["src"]
