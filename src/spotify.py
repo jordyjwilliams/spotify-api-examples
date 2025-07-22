@@ -319,3 +319,23 @@ class SpotifyClient:
         )
         return response_data["snapshot_id"]
 
+    async def update_playlist(
+        self,
+        playlist_id: str,
+        name: str | None = None,
+        description: str | None = None,
+        public: bool | None = None,
+        collaborative: bool | None = None,
+    ) -> None:
+        """Update playlist details."""
+        data: dict[str, Any] = {}
+        if name is not None:
+            data["name"] = name
+        if description is not None:
+            data["description"] = description
+        if public is not None:
+            data["public"] = public
+        if collaborative is not None:
+            data["collaborative"] = collaborative
+
+        await self._make_request("PUT", f"/playlists/{playlist_id}", data=data)
