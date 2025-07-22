@@ -177,10 +177,11 @@ async def error_handling_example():
 ### Code Quality
 
 ```bash
-# Format code
+# Format: code/imports
 uv run ruff format .
+uv run ruff check --select I .
 
-# Lint code
+# Lint: code
 uv run ruff check .
 
 # Type checking
