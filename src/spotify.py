@@ -250,3 +250,21 @@ class SpotifyClient:
             "GET", f"/users/{user}/playlists", params=params
         )
         return data["items"]
+
+    async def get_playlist(
+        self,
+        playlist_id: str,
+        fields: str | None = None,
+        market: str | None = None,
+    ) -> Playlist:
+        """Get playlist details."""
+        params = {}
+        if fields:
+            params["fields"] = fields
+        if market:
+            params["market"] = market
+
+        data = await self._make_request(
+            "GET", f"/playlists/{playlist_id}", params=params
+        )
+        return Playlist.model_validate(data)
