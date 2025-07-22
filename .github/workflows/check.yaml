@@ -66,5 +66,5 @@ jobs:
       if: always()
       with:
         files: "test-results.xml"
-        comment_mode: create
+        comment_mode: always
         compare_to_earlier_commit: true
