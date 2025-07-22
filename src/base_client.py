@@ -3,8 +3,8 @@
 import base64
 import json
 import logging
-import secrets
 from pathlib import Path
+import secrets
 from typing import Any
 from urllib.parse import urlencode
 import webbrowser
@@ -24,6 +24,7 @@ TOKEN_CACHE_FILE = Path(".spotify_token_cache.json")
 
 class SpotifyAuthError(Exception):
     """Raised when authentication fails."""
+
     pass
 
 
@@ -292,4 +293,4 @@ class BaseSpotifyClient:
         if market:
             params["market"] = market
 
-        return await self._make_request("GET", "/search", params=params) 
+        return await self._make_request("GET", "/search", params=params)
