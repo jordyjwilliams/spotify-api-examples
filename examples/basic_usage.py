@@ -54,3 +54,30 @@ async def display_user_playlists(client: SpotifyClient):
         console.print(f"   [dim]... and {len(playlists) - 5} more playlists (showing top 5)[/dim]")
     return playlists
 
+
+async def search_and_display_tracks(client: SpotifyClient):
+    """Search for tracks and display results in a table."""
+    console.print("\n[bold cyan]3. Searching for tracks...[/bold cyan]")
+    search_query = "artist:Queen"
+    tracks = await client.search_tracks(search_query, limit=5)
+    console.print(f"   🔍 Found [bold yellow]{len(tracks)}[/bold yellow] tracks for '[italic]{search_query}[/italic]':")
+
+    # Create a table for tracks
+    track_table = Table(show_header=True, header_style="bold magenta")
+    track_table.add_column("Title", style="cyan", width=25)
+    track_table.add_column("Artist", style="blue", width=20)
+    track_table.add_column("Album", style="green", width=25)
+    track_table.add_column("Duration", style="yellow", justify="center")
+
+    for track in tracks:
+        artists = ", ".join(artist.name for artist in track.artists)
+        track_table.add_row(
+            track.name,
+            artists,
+            track.album.name,
+            track.duration_formatted
+        )
+
+    console.print(track_table)
+    return tracks
+
