@@ -268,3 +268,27 @@ class SpotifyClient:
             "GET", f"/playlists/{playlist_id}", params=params
         )
         return Playlist.model_validate(data)
+
+    async def create_playlist(
+        self,
+        name: str,
+        description: str | None = None,
+        public: bool = True,
+        collaborative: bool = False,
+        user_id: str | None = None,
+    ) -> Playlist:
+        """Create a new playlist."""
+        user = user_id or self._user_id or (await self.get_current_user()).id
+
+        data: dict[str, Any] = {
+            "name": name,
+            "public": public,
+            "collaborative": collaborative,
+        }
+        if description:
+            data["description"] = description
+
+        response_data = await self._make_request(
+            "POST", f"/users/{user}/playlists", data=data
+        )
+        return Playlist.model_validate(response_data)
