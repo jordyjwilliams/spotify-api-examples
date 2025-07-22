@@ -111,3 +111,11 @@ async def add_tracks_to_playlist(client: SpotifyClient, playlist, tracks):
     return snapshot_id
 
 
+async def display_updated_playlist(client: SpotifyClient, playlist):
+    """Display the updated playlist information."""
+    console.print("\n[bold cyan]6. Getting updated playlist...[/bold cyan]")
+    updated_playlist = await client.get_playlist(playlist.id)
+    console.print(f"   📊 Playlist now has [bold yellow]{updated_playlist.track_count}[/bold yellow] tracks")
+    console.print(f"   ⏱️  Total duration: [bold yellow]{updated_playlist.duration_formatted}[/bold yellow]")
+    return updated_playlist
+
