@@ -22,4 +22,11 @@ def _get_version() -> str:
 
 __version__ = _get_version()
 
-__all__ = ["SpotifyClient", "Playlist", "Track", "User", "SpotifyAuthError", "SpotifyAPIError"]
+__all__ = [
+    "SpotifyClient",
+    "Playlist",
+    "Track",
+    "User",
+    "SpotifyAuthError",
+    "SpotifyAPIError",
+]
