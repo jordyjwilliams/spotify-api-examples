@@ -15,7 +15,7 @@ Secure examples and tools for working with the [Spotify Web API](https://develop
 - **Type-safe API interactions** with Pydantic models
 - **Modern Python tooling** with uv, ruff, and pyright
 - **Comprehensive examples** for all playlist endpoints
-- **CLI interface** for easy testing and exploration
+- **Token persistence** for seamless authentication
 - **Async support** for high-performance operations
 
 ## 📋 Prerequisites
@@ -45,30 +45,60 @@ Secure examples and tools for working with the [Spotify Web API](https://develop
 3. Add `http://localhost:8888/callback` to your Redirect URIs
 4. Copy your Client ID and Client Secret
 
-## 🎯 Usage
-### Python API
+## 🔐 Authentication & Token Persistence
+
+The library uses Spotify's OAuth 2.0 Authorization Code flow for secure authentication. Here's how it works:
+
+### First-Time Authentication
+
+When you run the library for the first time:
+
+1. **Browser Opens**: A browser window will open to Spotify's authorization page
+2. **User Consent**: You'll be asked to authorize the app to access your Spotify account
+3. **Token Exchange**: The library exchanges the authorization code for access and refresh tokens
+4. **Token Caching**: Tokens are automatically saved to `.spotify_token_cache.json` for future use
+    * This happens is this script and tooling here is primarily for local testing.
+
+### Subsequent Runs
+
+On subsequent runs, the library will:
+
+1. **Load Cached Tokens**: Automatically load tokens from the cache file
+2. **Validate Tokens**: Test the cached tokens to ensure they're still valid
+3. **Use Cached Tokens**: If valid, use them directly without re-authentication
+4. **Auto-Refresh**: If access token expires, automatically refresh using the refresh token
+5. **Re-authenticate**: Only if tokens are completely invalid (e.g., revoked by user)
+
+### Token Cache Management
 
 ```python
 from src.spotify import SpotifyClient
 
-async with SpotifyClient() as client:
-    # Get user's playlists
-    playlists = await client.get_user_playlists()
-    
-    # Create a new playlist
-    playlist = await client.create_playlist(
-        name="My Playlist",
-        description="A test playlist"
-    )
-    
-    # Add tracks
-    await client.add_tracks_to_playlist(
-        playlist_id=playlist.id,
-        track_ids=["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]
-    )
+# Clear the authentication cache (forces re-authentication)
+client = SpotifyClient()
+client.clear_auth_cache()
 ```
 
 ## 📚 Examples
+## 🎯 Quick Start
+
+The easiest way to get started is with the comprehensive example script:
+
+```bash
+uv run python -m examples.basic_usage
+```
+**What it demonstrates:**
+- User authentication and profile retrieval
+- Playlist management (create, read, update)
+- Track search and discovery
+- Playlist modification (adding tracks)
+> [!TIP]
+> **Quick Start**: The `basic_usage.py` script is the best way to get started! It provides a complete demonstration of all the library's features with beautiful console output using Rich. Run it after setting up your `.env` file to see everything in action.
+> 
+> **Token Persistence**: Authentication tokens are automatically cached in `.spotify_token_cache.json` and will be reused on subsequent runs, so you won't need to re-authenticate each time!
+
+> [!IMPORTANT]
+> This will create playlists in your account!
 
 ### Basic Playlist Operations
 
@@ -106,6 +136,37 @@ async def create_playlist_example():
         await client.add_tracks_to_playlist(playlist.id, track_uris)
         print(f"Added {len(track_uris)} tracks to {playlist.name}")
 ```
+
+### Search and Discovery
+
+```python
+async def search_example():
+    async with SpotifyClient() as client:
+        # Search for tracks
+        tracks = await client.search_tracks("artist:Queen", limit=10)
+        
+        # Search for playlists
+        results = await client.search("workout", ["playlist"], limit=5)
+        playlists = results.playlists.items if results.playlists else []
+        
+        print(f"Found {len(tracks)} tracks and {len(playlists)} playlists")
+```
+
+### Error Handling
+
+```python
+from src.spotify import SpotifyClient, SpotifyAPIError
+
+async def error_handling_example():
+    async with SpotifyClient() as client:
+        try:
+            playlist = await client.get_playlist("invalid_playlist_id")
+        except SpotifyAPIError as e:
+            print(f"API Error: {e}")
+            print(f"Status Code: {e.status_code}")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+```
 ## 🔧 Development
 
 ### Code Quality
@@ -129,16 +190,14 @@ uv run ruff check . && uv run ruff format --check . && uv run pyright
 spotify-api-examples/
 ├── src/
 │   ├── __init__.py
-│   ├── cli.py              # CLI interface
 │   ├── config.py           # Configuration management
 │   ├── models.py           # Pydantic models
 │   ├── spotify.py          # Main Spotify client
-│   └── utils.py            # Utility functions
+# NOTE: tests have not been written yet! TODO
 ├── tests/
 │   ├── __init__.py
 │   ├── conftest.py         # Test configuration
-│   ├── test_playlists.py   # Playlist tests
-│   └── test_spotify.py     # Client tests
+│   ├── test_models.py      # Model tests
 ├── .env.example            # Environment template
 ├── .gitignore
 ├── pyproject.toml          # Project configuration

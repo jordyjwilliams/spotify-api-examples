@@ -1,9 +1,11 @@
 """Main Spotify API client for playlist operations."""
 
 import base64
+import json
 import logging
 import secrets
 import webbrowser
+from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
@@ -13,7 +15,6 @@ from pydantic import ValidationError
 from .auth_server import AuthServer
 from .config import SpotifyConfig
 from .models import (
-    AudioFeatures,
     Playlist,
     SearchResult,
     Track,
@@ -22,9 +23,13 @@ from .models import (
 
 logger = logging.getLogger(__name__)
 
+# Token cache file
+TOKEN_CACHE_FILE = Path(".spotify_token_cache.json")
+
 
 class SpotifyAuthError(Exception):
     """Raised when authentication fails."""
+
     pass
 
 
@@ -96,10 +101,64 @@ class SpotifyClient:
             )
         return self._client
 
+    def _load_cached_tokens(self) -> bool:
+        """Load tokens from cache file if available."""
+        try:
+            if TOKEN_CACHE_FILE.exists():
+                with open(TOKEN_CACHE_FILE) as f:
+                    token_data = json.load(f)
+                    self._access_token = token_data.get("access_token")
+                    self._refresh_token = token_data.get("refresh_token")
+                    logger.info("Loaded tokens from cache")
+                    return True
+        except Exception as e:
+            logger.warning(f"Failed to load cached tokens: {e}")
+        return False
+
+    def _save_tokens_to_cache(self):
+        """Save current tokens to cache file."""
+        try:
+            if self._access_token and self._refresh_token:
+                token_data = {
+                    "access_token": self._access_token,
+                    "refresh_token": self._refresh_token,
+                }
+                with open(TOKEN_CACHE_FILE, "w") as f:
+                    json.dump(token_data, f)
+                logger.info("Saved tokens to cache")
+        except Exception as e:
+            logger.warning(f"Failed to save tokens to cache: {e}")
+
+    def _clear_cached_tokens(self):
+        """Clear cached tokens."""
+        try:
+            if TOKEN_CACHE_FILE.exists():
+                TOKEN_CACHE_FILE.unlink()
+                logger.info("Cleared cached tokens")
+        except Exception as e:
+            logger.warning(f"Failed to clear cached tokens: {e}")
+
+    def clear_auth_cache(self):
+        """Clear the authentication cache. Useful for forcing re-authentication."""
+        self._access_token = None
+        self._refresh_token = None
+        self._clear_cached_tokens()
+        logger.info("Authentication cache cleared")
+
     async def _ensure_authenticated(self):
         """Ensure we have a valid access token."""
         if not self._access_token:
-            await self.authenticate()
+            # Try to load from cache first
+            if not self._load_cached_tokens():
+                await self.authenticate()
+            else:
+                # Verify the cached token is still valid
+                try:
+                    await self._get_user_id()
+                except Exception:
+                    logger.info("Cached token is invalid, re-authenticating...")
+                    self._clear_cached_tokens()
+                    await self.authenticate()
 
     async def authenticate(self, force_refresh: bool = False):
         """Authenticate with Spotify using Authorization Code flow."""
@@ -165,6 +224,9 @@ class SpotifyClient:
         self._access_token = token_data["access_token"]
         self._refresh_token = token_data.get("refresh_token")
 
+        # Save tokens to cache
+        self._save_tokens_to_cache()
+
         logger.info("Successfully obtained access token")
 
     async def _refresh_access_token(self):
@@ -199,6 +261,9 @@ class SpotifyClient:
         # Update refresh token if provided
         if "refresh_token" in token_data:
             self._refresh_token = token_data["refresh_token"]
+
+        # Save updated tokens to cache
+        self._save_tokens_to_cache()
 
         logger.info("Successfully refreshed access token")
 
@@ -386,16 +451,3 @@ class SpotifyClient:
         if result.tracks and "items" in result.tracks:
             return [Track.model_validate(item) for item in result.tracks["items"]]
         return []
-
-    async def get_track_audio_features(self, track_id: str) -> AudioFeatures:
-        """Get audio features for a track."""
-        data = await self._make_request("GET", f"/audio-features/{track_id}")
-        return AudioFeatures.model_validate(data)
-
-    async def get_tracks_audio_features(
-        self, track_ids: list[str]
-    ) -> list[AudioFeatures]:
-        """Get audio features for multiple tracks."""
-        params = {"ids": ",".join(track_ids)}
-        data = await self._make_request("GET", "/audio-features", params=params)
-        return [AudioFeatures.model_validate(item) for item in data["audio_features"]]
