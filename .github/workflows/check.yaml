@@ -56,14 +56,6 @@ jobs:
           --junitxml=test-results.xml \
           --tb=short
 
-    - name: Upload Coverage Reports to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-
     - name: Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
