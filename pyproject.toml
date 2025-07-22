@@ -56,6 +56,19 @@ lint.ignore = [
     "E501",  # line too long, handled by ruff format
 ]
 
+# Import sorting configuration
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+known-third-party = ["httpx", "pydantic", "rich", "typer", "fastapi", "uvicorn"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+force-sort-within-sections = true
+
 [tool.pyright]
 include = ["src"]
 exclude = [
