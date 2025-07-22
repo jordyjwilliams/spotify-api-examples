@@ -118,3 +118,35 @@ class SpotifyClient:
 
         # Get user ID
         await self._get_user_id()
+
+    async def _exchange_code_for_tokens(self, code: str):
+        """Exchange authorization code for access and refresh tokens."""
+        # Prepare request
+        auth_header = base64.b64encode(
+            f"{self.config.client_id}:{self.config.client_secret}".encode()
+        ).decode()
+
+        data = {
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": str(self.config.redirect_uri),
+        }
+
+        headers = {
+            "Authorization": f"Basic {auth_header}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+
+        # Make request
+        response = await self.client.post(
+            self.config.token_url, data=data, headers=headers
+        )
+
+        if response.status_code != 200:
+            raise SpotifyAuthError(f"Token exchange failed: {response.text}")
+
+        token_data = response.json()
+        self._access_token = token_data["access_token"]
+        self._refresh_token = token_data.get("refresh_token")
+
+        logger.info("Successfully obtained access token")
